@@ -4,6 +4,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.utils.Position;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -37,13 +38,13 @@ public class PlayerUtil {
     }
 
     public static boolean isOnClimbable(Player player) {
-        if(player.getLocation().getBlock().getType() == Material.LADDER || player.getLocation().getBlock().getType() == Material.VINE ){
+        if(player.getPosition().getBlock().getType() == Material.LADDER || player.getLocation().getBlock().getType() == Material.VINE ){
             return true;
         }
         return false;
     }
 
-    public static Set<Block> getNearbyBlocks(Location location, int radius) {
+    public static Set<Block> getNearbyBlocks(Position location, int radius) {
         Set<Block> blocks = new HashSet<>();
 
         for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {

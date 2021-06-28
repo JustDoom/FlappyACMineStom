@@ -1,13 +1,11 @@
 package com.justdoom.flappyanticheat.data;
 
 import com.justdoom.flappyanticheat.FlappyAnticheat;
-import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.checks.CheckManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BoundingBox;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.Player;
 
 import java.util.*;
 
@@ -23,7 +21,7 @@ public class PlayerData {
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
-        this.player = Bukkit.getPlayer(uuid);
+        this.player = MinecraftServer.getConnectionManager().getPlayer(uuid);
         this.pastVictimBoxes = new ArrayList<>();
 
         this.checkManager = new CheckManager(FlappyAnticheat.getInstance());

@@ -1,6 +1,5 @@
 package com.justdoom.flappyanticheat;
 
-import com.extollit.tuple.SymmetricPair;
 import com.justdoom.flappyanticheat.checks.CheckManager;
 import com.justdoom.flappyanticheat.commands.FlagClickCommand;
 import com.justdoom.flappyanticheat.commands.FlappyACCommand;
@@ -9,18 +8,15 @@ import com.justdoom.flappyanticheat.data.PlayerDataManager;
 import com.justdoom.flappyanticheat.commands.tabcomplete.FlappyAnticheatTabCompletion;
 import com.justdoom.flappyanticheat.listener.PlayerConnectionListener;
 import com.justdoom.flappyanticheat.utils.BrandMessageUtil;
-import com.justdoom.flappyanticheat.utils.UpdateChecker;
 import com.justdoom.flappyanticheat.violations.ViolationHandler;
 import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.settings.PacketEventsSettings;
 import io.github.retrooper.packetevents.utils.server.ServerVersion;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
-import org.apache.logging.log4j.core.appender.SyslogAppender;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
-
-import java.util.concurrent.Callable;
 
 public class FlappyAnticheat extends Extension {
 
@@ -43,8 +39,8 @@ public class FlappyAnticheat extends Extension {
 
         //Register incoming plugin channel for client brand
 
-        Messenger messenger = Bukkit.getMessenger();
-        messenger.registerIncomingPluginChannel(FlappyAnticheat.getInstance(), "minecraft:brand", new BrandMessageUtil());
+        //Messenger messenger = Bukkit.getMessenger();
+        //messenger.registerIncomingPluginChannel(FlappyAnticheat.getInstance(), "minecraft:brand", new BrandMessageUtil());
 
         //Register events
         this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this), this);
@@ -54,7 +50,7 @@ public class FlappyAnticheat extends Extension {
         this.getCommand("flappyacflagclick").setExecutor(new FlagClickCommand());
 
         //Register Tab completion
-        this.getCommand("flappyanticheat").setTabCompleter(new FlappyAnticheatTabCompletion());
+        //this.getCommand("flappyanticheat").setTabCompleter(new FlappyAnticheatTabCompletion());
 
         loadModules();
     }

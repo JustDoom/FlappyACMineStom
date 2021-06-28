@@ -1,17 +1,13 @@
 package com.justdoom.flappyanticheat.customevents;
 
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.CancellableEvent;
 
-public class ViolationResetEvent extends Event implements Cancellable {
-
-    private static final HandlerList HANDLERS = new HandlerList();
-
+public class ViolationResetEvent implements Event, CancellableEvent {
     private boolean isCancelled;
 
     public ViolationResetEvent() {
-        super(true);
+        super();
         this.isCancelled = false;
     }
 
@@ -23,14 +19,5 @@ public class ViolationResetEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean isCancelled) {
         this.isCancelled = isCancelled;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
     }
 }

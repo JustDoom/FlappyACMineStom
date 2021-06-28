@@ -1,6 +1,6 @@
 package com.justdoom.flappyanticheat.data;
 
-import org.bukkit.entity.Player;
+import net.minestom.server.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class FlappyPlayer {
 
     private FlappyPlayer(Player player) {
         this.player = player;
-        flappyPlayers.put(player.getName(), this);
+        flappyPlayers.put(player.getUsername(), this);
     }
 
     // Return a running instance (or create a new one)

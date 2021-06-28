@@ -5,19 +5,14 @@ import com.justdoom.flappyanticheat.customevents.FlagEvent;
 import com.justdoom.flappyanticheat.customevents.PunishEvent;
 import com.justdoom.flappyanticheat.utils.Color;
 import com.justdoom.flappyanticheat.utils.PlayerUtil;
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.event.PacketListenerAbstract;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Check extends PacketListenerAbstract {
+public class Check {
 
     public String check, checkType;
     public boolean experimental;
@@ -31,7 +26,8 @@ public class Check extends PacketListenerAbstract {
 
     public void fail(String debug, Player player) {
         FlagEvent flagEvent = new FlagEvent(player, this);
-        Bukkit.getPluginManager().callEvent(flagEvent);
+        EventNode<Event> node = EventNode.all("demo");
+        node.call(flagEvent);
         if(flagEvent.isCancelled()) {
             return;
         }
@@ -77,7 +73,7 @@ public class Check extends PacketListenerAbstract {
             Bukkit.getScheduler().runTask(FlappyAnticheat.getInstance(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
         }
         if(FlappyAnticheat.getInstance().getConfig().getBoolean(path + ".broadcast-punishment")) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
+            for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
                 p.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("messages.punish")).replace("{player}", player.getName()));
             }
         }

@@ -1,8 +1,6 @@
 package com.justdoom.flappyanticheat.data;
 
 import com.justdoom.flappyanticheat.FlappyAnticheat;
-import com.justdoom.flappyanticheat.utils.Color;
-import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,7 +14,7 @@ public class FileData {
     }
 
     public void addToFile(String fileName, String message) {
-        File log = new File(FlappyAnticheat.getInstance().getDataFolder(), fileName);
+        File log = new File(FlappyAnticheat.getInstance().getDataDirectory().toString(), fileName);
         try{
             if(!log.exists()){
                 createFiles(fileName);
@@ -30,8 +28,8 @@ public class FileData {
     }
 
     public void createFiles(String name) {
-        if (!new File(FlappyAnticheat.getInstance().getDataFolder(), name).exists()) {
-            File todayFile = new File(FlappyAnticheat.getInstance().getDataFolder(), name);
+        if (!new File(FlappyAnticheat.getInstance().getDataDirectory().toString(), name).exists()) {
+            File todayFile = new File(FlappyAnticheat.getInstance().getDataDirectory().toString(), name);
             try {
                 todayFile.createNewFile(); // Error
             } catch (IOException e) {
