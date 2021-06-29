@@ -34,6 +34,6 @@ public class PlayerData {
                     pastVictimBoxes.add(vicitm.getBoundingBox());
                 }
             }
-        }.runTaskTimerAsynchronously(FlappyAnticheat.getInstance(),0L,1L);
+        }.runTaskTimerAsynchronously(FlappyAnticheat.getInstance(), 0L, 1L);
     }
 }
