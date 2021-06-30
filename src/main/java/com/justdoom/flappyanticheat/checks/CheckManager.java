@@ -12,11 +12,8 @@ import com.justdoom.flappyanticheat.checks.player.blockplace.BlockPlaceA;
 import com.justdoom.flappyanticheat.checks.player.badpackets.BadPacketsA;
 import com.justdoom.flappyanticheat.checks.player.badpackets.BadPacketsB;
 import com.justdoom.flappyanticheat.checks.player.blockplace.BlockPlaceB;
-import com.justdoom.flappyanticheat.checks.player.inventory.InventoryA;
 import com.justdoom.flappyanticheat.checks.player.skinblinker.SkinBlinkerA;
 import com.justdoom.flappyanticheat.checks.player.timer.TimerA;
-import io.github.retrooper.packetevents.PacketEvents;
-import org.bukkit.Bukkit;
 
 public class CheckManager {
 
