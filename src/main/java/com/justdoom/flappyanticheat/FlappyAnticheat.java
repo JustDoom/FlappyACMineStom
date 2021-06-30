@@ -62,12 +62,6 @@ public class FlappyAnticheat extends Extension {
         loadModules();
     }
 
-    enum Mood {
-
-        HAPPY, SAD, CONFUSED, NEUTRAL;
-
-    }
-
     @Override
     public void terminate() {
         System.out.println("e");
