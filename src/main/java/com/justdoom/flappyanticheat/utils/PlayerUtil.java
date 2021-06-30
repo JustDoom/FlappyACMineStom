@@ -1,10 +1,17 @@
 package com.justdoom.flappyanticheat.utils;
 
+import com.justdoom.flappyanticheat.FlappyAnticheat;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.location.RelativeVec;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -31,26 +38,27 @@ public class PlayerUtil {
     }
 
     public static boolean isInLiquid(Player player) {
-        if(player.isInWater() || player.getLocation().getBlock().getType() == Block.LAVA){
+        if(player.isInWater() || player.getInstance().getBlock(player.getPosition().toBlockPosition()).getBlockId() == Block.LAVA.getBlockId()){
             return true;
         }
         return false;
     }
 
     public static boolean isOnClimbable(Player player) {
-        if(player.getPosition().getBlock().getType() == Material.LADDER || player.getLocation().getBlock().getType() == Material.VINE ){
+        Block block = player.getInstance().getBlock(player.getPosition().toBlockPosition());
+        if(block.getBlockId() == Material.LADDER.getId() || block.getBlockId() == Material.VINE.getId() ){
             return true;
         }
         return false;
     }
 
-    public static Set<Block> getNearbyBlocks(Position location, int radius) {
+    public static Set<Block> getNearbyBlocks(Position location, int radius, Instance world) {
         Set<Block> blocks = new HashSet<>();
 
-        for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
-            for(int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
-                for(int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
-                    blocks.add(location.getWorld().getBlockAt(x, y, z));
+        for(int x = location.toBlockPosition().getX() - radius; x <= location.toBlockPosition().getX() + radius; x++) {
+            for(int y = location.toBlockPosition().getY() - radius; y <= location.toBlockPosition().getY() + radius; y++) {
+                for(int z = location.toBlockPosition().getZ() - radius; z <= location.toBlockPosition().getZ() + radius; z++) {
+                    blocks.add(world.getBlock(x, y, z));
                 }
             }
         }

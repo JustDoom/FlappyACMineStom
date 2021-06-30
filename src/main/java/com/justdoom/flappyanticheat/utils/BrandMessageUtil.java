@@ -9,10 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 
 public class BrandMessageUtil extends PluginMessageListener {
 
-    @Override
     public void onPluginMessageReceived(String channel, Player p, byte[] msg) {
         try {
-            String message = FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.client-brand");
+            String message = FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "client-brand").getString();
             message = Color.translate(message);
             message = message.replace("{player}", p.getUsername()).replace("{brand}", new String(msg, "UTF-8").substring(1));
             String finalMessage = message;
@@ -20,7 +19,7 @@ public class BrandMessageUtil extends PluginMessageListener {
                     .stream().filter(playerData -> p.hasPermission("flappyanticheat.alerts") && !FlappyAnticheat.getInstance().dataManager.alertsDisabled.contains(p))
                     .forEach(playerData -> playerData.player.sendMessage(finalMessage));
 
-            if (FlappyAnticheat.getInstance().getConfig().getBoolean("messages.flag-to-console")) {
+            if (FlappyAnticheat.getInstance().root.node("messages", "flag-to-console").getBoolean()) {
                 //Bukkit.getConsoleSender().sendMessage(Color.translate(message));
             }
         } catch (UnsupportedEncodingException e) {

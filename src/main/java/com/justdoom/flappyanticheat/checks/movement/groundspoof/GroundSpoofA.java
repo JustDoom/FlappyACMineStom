@@ -1,15 +1,13 @@
 package com.justdoom.flappyanticheat.checks.movement.groundspoof;
 
-import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.checks.Check;
-import com.justdoom.flappyanticheat.checks.CheckData;
-import com.justdoom.flappyanticheat.data.PlayerData;
 import com.justdoom.flappyanticheat.utils.PlayerUtil;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
 import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.event.impl.PacketPlayReceiveEvent;
 import io.github.retrooper.packetevents.packettype.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
+import net.minestom.server.entity.Player;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -21,10 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GroundSpoofA extends Check {
@@ -78,7 +73,7 @@ public class GroundSpoofA extends Check {
                         }
                     }
 
-                    for (Block block : PlayerUtil.getNearbyBlocks(new Location(player.getWorld(), packet.getX(), packet.getY(), packet.getZ()), 2)) {
+                    for (Block block : PlayerUtil.getNearbyBlocks(new Location(player.getWorld(), packet.getX(), packet.getY(), packet.getZ()), 2, player.getInstance())) {
 
                         if (Tag.SHULKER_BOXES.isTagged(block.getType())) {
                             shulker = true;

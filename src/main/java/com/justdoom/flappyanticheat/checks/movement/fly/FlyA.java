@@ -1,10 +1,6 @@
 package com.justdoom.flappyanticheat.checks.movement.fly;
 
-import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.checks.Check;
-import com.justdoom.flappyanticheat.checks.CheckData;
-import com.justdoom.flappyanticheat.data.PlayerData;
-import com.justdoom.flappyanticheat.utils.PlayerUtil;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
 import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.event.impl.PacketPlayReceiveEvent;

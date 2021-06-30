@@ -14,6 +14,8 @@ import com.justdoom.flappyanticheat.checks.player.badpackets.BadPacketsB;
 import com.justdoom.flappyanticheat.checks.player.blockplace.BlockPlaceB;
 import com.justdoom.flappyanticheat.checks.player.skinblinker.SkinBlinkerA;
 import com.justdoom.flappyanticheat.checks.player.timer.TimerA;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
 
 public class CheckManager {
 
@@ -24,14 +26,14 @@ public class CheckManager {
     }
 
     public void loadChecks(){
-        PacketEvents.get().registerListener(new GroundSpoofA());
+        new GroundSpoofA();
         //PacketEvents.get().registerListener(new FlyA());
         PacketEvents.get().registerListener(new BadPacketsA());
         //PacketEvents.get().registerListener(new BadPacketsB());
         //PacketEvents.get().registerListener(new NoSlowA());
         PacketEvents.get().registerListener(new SkinBlinkerA());
         PacketEvents.get().registerListener(new AntiCactusA());
-        PacketEvents.get().registerListener(new TimerA());
+        new TimerA();
         PacketEvents.get().registerListener(new ForcefieldA());
         PacketEvents.get().registerListener(new RangeA());
 
