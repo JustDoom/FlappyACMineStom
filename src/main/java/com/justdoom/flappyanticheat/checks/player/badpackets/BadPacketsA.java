@@ -1,27 +1,27 @@
 package com.justdoom.flappyanticheat.checks.player.badpackets;
 
 import com.justdoom.flappyanticheat.checks.Check;
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.event.impl.PacketPlayReceiveEvent;
-import io.github.retrooper.packetevents.packettype.PacketType;
-import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.player.PlayerPacketEvent;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 
 public class BadPacketsA extends Check {
 
     public BadPacketsA(){
         super("BadPackets", "A", false);
-    }
 
-    @Override
-    public void onPacketPlayReceive(PacketPlayReceiveEvent event) {
+        EventNode<Event> node = EventNode.all("demo");
+        node.addListener(PlayerPacketEvent.class, event -> {
+            if (event.getPacket() instanceof ClientPlayerPositionPacket || event.getPacket() instanceof ClientPlayerPositionAndRotationPacket) {
 
-        if (event.getPacketId() == PacketType.Play.Client.POSITION || event.getPacketId() == PacketType.Play.Client.POSITION_LOOK) {
-
-            float pitch = event.getPlayer().getLocation().getPitch();
-            if(Math.abs(pitch) > 90F || Math.abs(pitch) < -90F){
-                String suspectedHack = "Old/Bad KillAura (This cannot false)";
-                fail("&7pitch=&2" + pitch + " &7Suspected Hack: &2" + suspectedHack, event.getPlayer());
+                float pitch = event.getPlayer().getPosition().getPitch();
+                if(Math.abs(pitch) > 90F || Math.abs(pitch) < -90F){
+                    String suspectedHack = "Old/Bad KillAura (This cannot false)";
+                    fail("&7pitch=&2" + pitch + " &7Suspected Hack: &2" + suspectedHack, event.getPlayer());
+                }
             }
-        }
+        });
     }
 }

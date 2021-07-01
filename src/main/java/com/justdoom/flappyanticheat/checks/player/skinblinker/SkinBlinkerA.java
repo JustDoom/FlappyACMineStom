@@ -3,38 +3,42 @@ package com.justdoom.flappyanticheat.checks.player.skinblinker;
 import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.player.PlayerPacketEvent;
+import net.minestom.server.event.player.PlayerSettingsChangeEvent;
 
 public class SkinBlinkerA extends Check {
 
-    public SkinBlinkerA(){
-        super("SkinBlinker", "A", false);
-    }
-
     private int lastSkin = -1;
 
-    @Override
-    public void onPacketPlayReceive(PacketPlayReceiveEvent event) {
+    public SkinBlinkerA(){
+        super("SkinBlinker", "A", false);
 
-        if (event.getPacketId() == PacketType.Play.Client.SETTINGS){
-            WrappedPacketInSettings packet = new WrappedPacketInSettings(event.getNMSPacket());
-            Player player = event.getPlayer();
+        //TODO finish skinblinker port
 
-            if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
-                return;
+        /**EventNode<Event> node = EventNode.all("demo");
+        node.addListener(PlayerSettingsChangeEvent.class, event -> {
 
-            if (lastSkin == -1) {
+                Player player = event.getPlayer();
+
+                if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
+                    return;
+
+                if (lastSkin == -1) {
+                    player.getSkin().get
+                    lastSkin = event.getDisplaySkinPartsMask();
+                    return;
+                }
+
+                if ((player.isSprinting()
+                        || player.isSneaking()
+                        || player.isBlocking())
+                        && lastSkin != packet.getDisplaySkinPartsMask()) {
+                    fail("&7last=&2" + lastSkin + " &7current=&2" + packet.getDisplaySkinPartsMask(), player);
+                }
+
                 lastSkin = packet.getDisplaySkinPartsMask();
-                return;
-            }
-
-            if ((player.isSprinting()
-                    || player.isSneaking()
-                    || player.isBlocking())
-                    && lastSkin != packet.getDisplaySkinPartsMask()) {
-                fail("&7last=&2" + lastSkin + " &7current=&2" + packet.getDisplaySkinPartsMask(), player);
-            }
-
-            lastSkin = packet.getDisplaySkinPartsMask();
-        }
+        });**/
     }
 }

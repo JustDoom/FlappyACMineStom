@@ -4,30 +4,34 @@ import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 
-public class BlockPlaceB extends Check implements Listener {
+public class BlockPlaceB extends Check {
 
     public BlockPlaceB() {
         super("BlockPlace", "B", true);
-    }
 
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+        EventNode<Event> node = EventNode.all("demo");
+        node.addListener(PlayerBlockPlaceEvent.class, event -> {
 
-        Player player = event.getPlayer();
+            Player player = event.getPlayer();
 
-        Block block = event.getBlock();
+            Block block = player.getInstance().getBlock(event.getBlockPosition());
 
-        ItemStack hand = player.getItemInHand();
+            ItemStack mainHand = player.getItemInMainHand();
+            ItemStack offHand = player.getItemInOffHand();
 
-        if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
-            return;
+            if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
+                return;
 
-        if (block.getType() != hand.getType() && block.getType() != player.getInventory().getItemInOffHand().getType()) {
+            if (block.getBlockId() != mainHand.getMaterial().getId() && block.getBlockId() != offHand.getMaterial().getId()) {
 
-            Bukkit.getScheduler().runTaskAsynchronously(FlappyAnticheat.getInstance(), () -> fail("hand=" + hand.getType() + " placed=" + block.getType(), player));
-        }
+                fail("hand=" + mainHand.getMaterial().getId() + " placed=" + block.getBlockId(), player);
+            }
+        });
     }
 }

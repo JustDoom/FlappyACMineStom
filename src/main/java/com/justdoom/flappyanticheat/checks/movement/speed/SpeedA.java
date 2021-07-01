@@ -11,6 +11,7 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,11 +56,12 @@ public class SpeedA extends Check {
 
             double bufferOrDefault = this.buffer.getOrDefault(uuid, 0.0);
 
+            //? new EntityFinder()
             if (!PlayerUtil.isOnClimbable(player) && !onGround && !lastOnGround && !(player.getNearbyEntities(1.5, 10, 1.5).size() > 0) && this.buffer.put(uuid, ++bufferOrDefault) > 2) {
 
                 boolean pistonHead = false;
 
-                for (Block block : PlayerUtil.getNearbyBlocks(new Position(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()), 2)) {
+                for (Block block : PlayerUtil.getNearbyBlocks(new Position(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()), 2, player.getInstance())) {
                     if (block.getBlockId() == Block.PISTON_HEAD.getBlockId()) {
                         pistonHead = true;
                         break;
@@ -67,7 +69,7 @@ public class SpeedA extends Check {
                 }
 
                 if (equalness > 0.027 && !pistonHead) {
-                    Bukkit.getScheduler().runTaskAsynchronously(FlappyAnticheat.getInstance(), () -> fail("e=" + equalness, player));
+                    fail("e=" + equalness, player);
                 }
             } else if(this.buffer.getOrDefault(uuid, 0.0) > 0) {
                 bufferOrDefault = this.buffer.getOrDefault(uuid, 0.0);

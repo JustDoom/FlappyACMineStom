@@ -28,18 +28,18 @@ public class CheckManager {
     public void loadChecks(){
         new GroundSpoofA();
         //PacketEvents.get().registerListener(new FlyA());
-        PacketEvents.get().registerListener(new BadPacketsA());
+        new BadPacketsA();
         //PacketEvents.get().registerListener(new BadPacketsB());
         //PacketEvents.get().registerListener(new NoSlowA());
-        PacketEvents.get().registerListener(new SkinBlinkerA());
-        PacketEvents.get().registerListener(new AntiCactusA());
+        new SkinBlinkerA();
+        new AntiCactusA();
         new TimerA();
-        PacketEvents.get().registerListener(new ForcefieldA());
-        PacketEvents.get().registerListener(new RangeA());
+        new ForcefieldA();
+        new RangeA();
 
-        Bukkit.getPluginManager().registerEvents(new BlockPlaceA(), plugin);
-        Bukkit.getPluginManager().registerEvents(new BlockPlaceB(), plugin);
-        Bukkit.getPluginManager().registerEvents(new SpeedA(), plugin);
+        new BlockPlaceA();
+        new BlockPlaceB();
+        new SpeedA();
         //Bukkit.getPluginManager().registerEvents(new InventoryA(), plugin);
     }
 }

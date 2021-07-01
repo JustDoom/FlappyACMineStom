@@ -5,10 +5,9 @@ import com.justdoom.flappyanticheat.utils.ServerUtil;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.entity.EntityTickEvent;
-import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.listener.PlayerPositionListener;
-import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.event.player.PlayerPacketEvent;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,11 +22,11 @@ public class TimerA extends Check {
         super("Timer", "A", true);
 
         EventNode<Event> node = EventNode.all("demo");
-        node.addListener(PlayerMoveEvent.class, event -> {
+        node.addListener(PlayerPacketEvent.class, event -> {
             Player player = event.getPlayer();
             UUID uuid = player.getUuid();
 
-            if (event.getPacketId() == PacketType.Play.Client.POSITION || e.getPacketId() == PacketType.Play.Client.POSITION_LOOK) {
+            if (event.getPacket() instanceof ClientPlayerPositionPacket || event.getPacket() instanceof ClientPlayerRotationPacket) {
 
                 if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
                     return;
@@ -47,7 +46,7 @@ public class TimerA extends Check {
                     fail("balance=" + balance, player);
                     this.balance.put(uuid, 0.0);
                 }
-            } else if (e.getPacketId() == PacketType.Play.Server.POSITION){
+            } else if (event.getPacket() instanceof ClientPlayerPositionPacket){
                 double balanceOrDefault = this.balance.getOrDefault(uuid, 0.0);
                 this.balance.put(uuid, balanceOrDefault -= 50.0);
             }
