@@ -1,17 +1,12 @@
 package com.justdoom.flappyanticheat.utils;
 
-import com.justdoom.flappyanticheat.FlappyAnticheat;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.location.RelativeVec;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -31,14 +26,14 @@ public class PlayerUtil {
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
                 | NoSuchFieldException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Exception while trying to get player ping.", e);
+            //Bukkit.getLogger().log(Level.SEVERE, "Exception while trying to get player ping.", e);
         }
 
         return -1;
     }
 
     public static boolean isInLiquid(Player player) {
-        if(player.isInWater() || player.getInstance().getBlock(player.getPosition().toBlockPosition()).getBlockId() == Block.LAVA.getBlockId()){
+        if(player.getInstance().getBlock(player.getPosition().toBlockPosition()).isLiquid() || player.getInstance().getBlock(player.getPosition().toBlockPosition()).getBlockId() == Block.LAVA.getBlockId()){
             return true;
         }
         return false;

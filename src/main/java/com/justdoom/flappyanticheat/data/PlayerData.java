@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.*;
 
@@ -25,15 +26,11 @@ public class PlayerData {
         this.pastVictimBoxes = new ArrayList<>();
 
         this.checkManager = new CheckManager(FlappyAnticheat.getInstance());
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                if(vicitm != null) {
-                    if(pastVictimBoxes.size() > 20) pastVictimBoxes.clear();
-                    pastVictimBoxes.add(vicitm.getBoundingBox());
-                }
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            if(vicitm != null) {
+                if(pastVictimBoxes.size() > 20) pastVictimBoxes.clear();
+                pastVictimBoxes.add(vicitm.getBoundingBox());
             }
-        }.runTaskTimerAsynchronously(FlappyAnticheat.getInstance(), 0L, 1L);
+        }).repeat(1, TimeUnit.MILLISECOND).schedule();
     }
 }

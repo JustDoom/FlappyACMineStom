@@ -1,71 +1,97 @@
 package com.justdoom.flappyanticheat.commands;
 
 import com.justdoom.flappyanticheat.FlappyAnticheat;
-import com.justdoom.flappyanticheat.utils.Color;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import com.justdoom.flappyanticheat.utils.ColorUtil;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-public class FlappyACCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if(command.getName().equalsIgnoreCase("flappyanticheat")){
-            if(args.length == 0){
-                sender.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + "&7Please do \"/flappyac help\" for the help command"));
+import java.io.IOException;
+import java.nio.file.Path;
 
-            //Reload
-            } else if (args[0].equalsIgnoreCase("reload")) {
-                FlappyAnticheat.getInstance().reloadConfig();
-                sender.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.reload")));
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 
-            //Reset Violations
-            } else if (args[0].equalsIgnoreCase("resetviolations")) {
-                if(args.length >= 2){
+public class FlappyACCommand extends Command {
+
+    public FlappyACCommand(){
+        super("flappyanticheat", "flappyac", "fac");
+
+        setCondition(Conditions::playerOnly);
+
+        ArgumentWord operation = Word("operation").from("reload", "resetviolations", "alerts", "profile");
+
+        //todo do proper tab completion depending on previous args
+
+        addSyntax(this::execute, operation);
+    }
+
+    private void execute(@NotNull CommandSender sender, @NotNull CommandContext context){
+        final String operation = context.get("operation");
+
+        sender.sendMessage(operation);
+
+        switch (operation){
+            case "reload":
+                final YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+                        .path(Path.of("./FlappyAnticheat/config.yml")) // Set where we will load and save to
+                        .build();
+
+                try {
+                    FlappyAnticheat.getInstance().root = loader.load();
+                } catch (IOException e) {
+                    System.err.println("An error occurred while loading this configuration: " + e.getMessage());
+                    if (e.getCause() != null) {
+                        e.getCause().printStackTrace();
+                    }
+                    System.exit(1);
+                    return;
+                }
+                sender.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "reload").getString()));
+
+            case "resetviolations":
+                //todo re-add violation reset for specific players
+                /**if(args.length >= 2){
                     if(Bukkit.getPlayerExact(args[1]) != null) {
                         FlappyAnticheat.getInstance().violationHandler.clearViolations(Bukkit.getPlayerExact(args[1]));
-                        for(Player p: Bukkit.getOnlinePlayers()){
+                        for(Player p: MinecraftServer.getConnectionManager().getOnlinePlayers()){
                             if(p.hasPermission("flappyanticheat.alerts")){
-                                p.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-reset.player").replace("{player}", args[1])));
+                                p.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-reset.player").replace("{player}", args[1])));
                             }
                         }
                         if(FlappyAnticheat.getInstance().getConfig().getBoolean("messages.flag-to-console")) {
-                            Bukkit.getConsoleSender().sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-reset.player").replace("{player}", args[1])));
+                            Bukkit.getConsoleSender().sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-reset.player").replace("{player}", args[1])));
                         }
                     } else {
-                        sender.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-remove-invalid-player")));
+                        sender.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-remove-invalid-player")));
                     }
-                } else {
+                } else {**/
                     FlappyAnticheat.getInstance().violationHandler.clearAllViolations();
-                    for (Player p : Bukkit.getOnlinePlayers()) {
+                    for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
                         if (p.hasPermission("flappyanticheat.alerts")) {
-                            p.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-reset.all")));
+                            p.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
                         }
                     }
-                    if(FlappyAnticheat.getInstance().getConfig().getBoolean("messages.flag-to-console")) {
-                        Bukkit.getConsoleSender().sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.violation-reset.all")));
+                    if(FlappyAnticheat.getInstance().root.node("messages", "flag-to-console").getBoolean()) {
+                        //todo MinecraftServer.getCommandManager().execute(MinecraftServer.getCommandManager().getConsoleSender(), ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
                     }
-                }
-
-                //Alerts toggle
-            } else if (args[0].equalsIgnoreCase("alerts")) {
-                if(!FlappyAnticheat.getInstance().dataManager.alertsDisabled.contains(((Player) sender).getPlayer())){
-                    FlappyAnticheat.getInstance().dataManager.disabledAlertsAdd(((Player) sender).getPlayer());
-                    sender.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.alert-toggle.disable")));
+                //}
+            case "alerts":
+                if(!FlappyAnticheat.getInstance().dataManager.alertsDisabled.contains(sender.asPlayer())){
+                    FlappyAnticheat.getInstance().dataManager.disabledAlertsAdd(sender.asPlayer());
+                    sender.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "alert-toggle", "disable").getString()));
                 } else {
-                    FlappyAnticheat.getInstance().dataManager.disabledAlertsRemove(((Player) sender).getPlayer());
-                    sender.sendMessage(Color.translate(FlappyAnticheat.getInstance().getConfig().getString("prefix") + FlappyAnticheat.getInstance().getConfig().getString("messages.alert-toggle.enable")));
+                    FlappyAnticheat.getInstance().dataManager.disabledAlertsRemove(sender.asPlayer());
+                    sender.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "alert-toggle", "enable")));
                 }
 
-                //Player profile
-            } else if (args[0].equalsIgnoreCase("profile")){
-                if(args.length > 1){
-                    Player targetPlayer = Bukkit.getPlayer(args[1]);
-                    //String clientBrand =
-                }
-            }
+            case "profile":
+
         }
-        return false;
     }
 }

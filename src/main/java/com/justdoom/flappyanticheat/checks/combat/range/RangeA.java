@@ -36,7 +36,7 @@ public class RangeA extends Check {
     public RangeA() {
         super("Range", "A", false);
 
-        EventNode<Event> node = EventNode.all("demo");
+        /**GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerPacketEvent.class, event -> {
 
             PlayerData data = FlappyAnticheat.getInstance().dataManager.getData(event.getPlayer().getUuid());
@@ -64,14 +64,14 @@ public class RangeA extends Check {
             } else if (event.getPacketId() == PacketType.Play.Client.KEEP_ALIVE) {
                 data.ping = (int) (System.currentTimeMillis() - this.lastKP);
             }
-        });
+        });**/
     }
 
-    @Override
+    /**@Override
     public void onPacketPlaySend(PacketPlaySendEvent event) {
         if (event.getPacketId() == PacketType.Play.Server.KEEP_ALIVE) {
             this.lastKP = System.currentTimeMillis();
 
         }
-    }
+    }**/
 }

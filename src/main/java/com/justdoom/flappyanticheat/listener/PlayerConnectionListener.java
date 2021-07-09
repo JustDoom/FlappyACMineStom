@@ -2,9 +2,11 @@ package com.justdoom.flappyanticheat.listener;
 
 import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.utils.BrandMessageUtil;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 
@@ -35,5 +37,7 @@ public class PlayerConnectionListener {
             flappyAnticheat.dataManager.removePlayer(player.getUuid());
             flappyAnticheat.dataManager.disabledAlertsRemove(player);
         });
+
+        MinecraftServer.getGlobalEventHandler().addChild(node);
     }
 }

@@ -3,9 +3,11 @@ package com.justdoom.flappyanticheat.checks.player.blockplace;
 import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.instance.block.Block;
@@ -20,7 +22,7 @@ public class BlockPlaceA extends Check {
     public BlockPlaceA() {
         super("BlockPlace", "A", true);
 
-        EventNode<Event> node = EventNode.all("demo");
+        GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerBlockPlaceEvent.class, event -> {
 
             if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))

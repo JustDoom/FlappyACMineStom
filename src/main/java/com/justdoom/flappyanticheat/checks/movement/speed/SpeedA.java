@@ -4,14 +4,17 @@ import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.PlayerUtil;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.utils.entity.EntityUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +34,7 @@ public class SpeedA extends Check {
     }
 
     public void SpeedA() {
-        EventNode<Event> node = EventNode.all("demo");
+        GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerMoveEvent.class, event -> {
             Player player = event.getPlayer();
             UUID uuid = player.getUuid();
@@ -57,7 +60,7 @@ public class SpeedA extends Check {
             double bufferOrDefault = this.buffer.getOrDefault(uuid, 0.0);
 
             //? new EntityFinder()
-            if (!PlayerUtil.isOnClimbable(player) && !onGround && !lastOnGround && !(player.getNearbyEntities(1.5, 10, 1.5).size() > 0) && this.buffer.put(uuid, ++bufferOrDefault) > 2) {
+            if (!PlayerUtil.isOnClimbable(player) && !onGround && !lastOnGround /**&& !(player.getNearbyEntities(1.5, 10, 1.5).size() > 0)**/ && this.buffer.put(uuid, ++bufferOrDefault) > 2) {
 
                 boolean pistonHead = false;
 

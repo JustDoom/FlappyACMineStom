@@ -5,18 +5,11 @@ import com.justdoom.flappyanticheat.commands.FlagClickCommand;
 import com.justdoom.flappyanticheat.commands.FlappyACCommand;
 import com.justdoom.flappyanticheat.data.FileData;
 import com.justdoom.flappyanticheat.data.PlayerDataManager;
-import com.justdoom.flappyanticheat.listener.PlayerConnectionListener;
 import com.justdoom.flappyanticheat.utils.FileUtil;
 import com.justdoom.flappyanticheat.violations.ViolationHandler;
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.settings.PacketEventsSettings;
-import io.github.retrooper.packetevents.utils.server.ServerVersion;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.messaging.Messenger;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.IOException;
@@ -48,31 +41,23 @@ public class FlappyAnticheat extends Extension {
         //Messenger messenger = Bukkit.getMessenger();
         //messenger.registerIncomingPluginChannel(FlappyAnticheat.getInstance(), "minecraft:brand", new BrandMessageUtil());
 
-        //Register events
-        this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this), this);
-
-        //Register commands
-        this.getCommand("flappyanticheat").setExecutor(new FlappyACCommand());
-        this.getCommand("flappyacflagclick").setExecutor(new FlagClickCommand());
-
-        loadModules();
-
         try {
-            if(!FileUtil.doesFileExist("./FlappyAnticheat"))
-                FileUtil.createDirectory("./FlappyAnticheat");
+            if(!FileUtil.doesFileExist("./extensions/FlappyAnticheat"))
+                FileUtil.createDirectory("./extensions/FlappyAnticheat");
 
-            if(!FileUtil.doesFileExist("./FlappyAnticheat/config.yml"))
-                FileUtil.addConfig("./FlappyAnticheat/config.yml");
+            if(!FileUtil.doesFileExist("./extensions/FlappyAnticheat/config.yml"))
+                FileUtil.addConfig("./extensions/FlappyAnticheat/config.yml");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         final YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
-                .path(Path.of("./FlappyAnticheat/config.yml")) // Set where we will load and save to
+                .path(Path.of("./extensions/FlappyAnticheat/config.yml")) // Set where we will load and save to
                 .build();
 
         try {
             root = loader.load();
+            getLogger().info("Config has been loaded");
         } catch (IOException e) {
             System.err.println("An error occurred while loading this configuration: " + e.getMessage());
             if (e.getCause() != null) {
@@ -81,6 +66,12 @@ public class FlappyAnticheat extends Extension {
             System.exit(1);
             return;
         }
+
+        loadModules();
+
+        //Register commands
+        MinecraftServer.getCommandManager().register(new FlagClickCommand());
+        MinecraftServer.getCommandManager().register(new FlappyACCommand());
     }
 
     @Override

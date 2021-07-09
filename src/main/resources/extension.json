@@ -1,0 +1,13 @@
+{
+  "entrypoint": "com.justdoom.flappyanticheat.FlappyAnticheat",
+  "name": "FlappyAnticheat",
+  "externalDependencies": {
+    "repositories": [
+      {"name": "Central", "url": "https://repo1.maven.org/maven2/"},
+      {"name": "jitpack.io", "url": "https://jitpack.io"}
+    ],
+    "artifacts": [
+      "org.spongepowered:configurate-yaml:4.1.1"
+    ]
+  }
+}

@@ -17,7 +17,7 @@ public class SkinBlinkerA extends Check {
 
         //TODO finish skinblinker port
 
-        /**EventNode<Event> node = EventNode.all("demo");
+        /**GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerSettingsChangeEvent.class, event -> {
 
                 Player player = event.getPlayer();

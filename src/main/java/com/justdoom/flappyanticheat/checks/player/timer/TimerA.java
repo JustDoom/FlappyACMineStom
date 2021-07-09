@@ -2,9 +2,11 @@ package com.justdoom.flappyanticheat.checks.player.timer;
 
 import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
@@ -21,7 +23,7 @@ public class TimerA extends Check {
     public TimerA() {
         super("Timer", "A", true);
 
-        EventNode<Event> node = EventNode.all("demo");
+        GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerPacketEvent.class, event -> {
             Player player = event.getPlayer();
             UUID uuid = player.getUuid();

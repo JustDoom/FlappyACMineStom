@@ -3,9 +3,10 @@ package com.justdoom.flappyanticheat.violations;
 import com.justdoom.flappyanticheat.FlappyAnticheat;
 import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.customevents.ViolationResetEvent;
-import com.justdoom.flappyanticheat.utils.Color;
+import com.justdoom.flappyanticheat.utils.ColorUtil;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.*;
 
@@ -14,23 +15,23 @@ public class ViolationHandler {
     private Map<UUID, Map<Check, Integer>> violations = new HashMap<>();
 
     public ViolationHandler(){
-        int delay = FlappyAnticheat.getInstance().root.node("violation-reset-delay").getInt() * 20;
+        int delay = FlappyAnticheat.getInstance().root.node("violation-reset-delay").getInt();
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(FlappyAnticheat.getInstance(), () -> {
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
             ViolationResetEvent violationResetEvent = new ViolationResetEvent();
-            Bukkit.getPluginManager().callEvent(violationResetEvent);
-            if(!violationResetEvent.isCancelled() && MinecraftServer.getConnectionManager().getOnlinePlayers().size() > 0) {
+            MinecraftServer.getGlobalEventHandler().call(violationResetEvent);
+            if (!violationResetEvent.isCancelled() && MinecraftServer.getConnectionManager().getOnlinePlayers().size() > 0) {
                 clearAllViolations();
-                for(Player p: MinecraftServer.getConnectionManager().getOnlinePlayers()){
-                    if(p.hasPermission("flappyanticheat.alerts")){
-                        p.sendMessage(Color.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
+                for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                    if (p.hasPermission("flappyanticheat.alerts")) {
+                        p.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
                     }
                 }
-                if(FlappyAnticheat.getInstance().root.node("messages", "flag-to-console").getBoolean()) {
-                    System.out.println(Color.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
+                if (FlappyAnticheat.getInstance().root.node("messages", "flag-to-console").getBoolean()) {
+                    System.out.println(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
                 }
             }
-        }, delay, delay);
+        }).delay( delay, TimeUnit.SECOND).repeat(delay, TimeUnit.SECOND).schedule();
     }
 
     public void addViolation(Check check, Player p){

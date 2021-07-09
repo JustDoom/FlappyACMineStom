@@ -30,7 +30,7 @@ public class FileUtil {
 
     public static void addConfig(String filename) throws IOException {
         Path path = Path.of(filename);
-        InputStream stream = FlappyAnticheat.class.getResourceAsStream("/" + filename);
+        InputStream stream = FlappyAnticheat.class.getResourceAsStream("/config.yml");
         Files.copy(stream, path);
     }
 }

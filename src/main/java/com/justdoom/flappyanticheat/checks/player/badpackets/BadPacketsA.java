@@ -1,8 +1,10 @@
 package com.justdoom.flappyanticheat.checks.player.badpackets;
 
 import com.justdoom.flappyanticheat.checks.Check;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
@@ -12,7 +14,7 @@ public class BadPacketsA extends Check {
     public BadPacketsA(){
         super("BadPackets", "A", false);
 
-        EventNode<Event> node = EventNode.all("demo");
+        GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerPacketEvent.class, event -> {
             if (event.getPacket() instanceof ClientPlayerPositionPacket || event.getPacket() instanceof ClientPlayerPositionAndRotationPacket) {
 

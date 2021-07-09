@@ -1,6 +1,9 @@
 package com.justdoom.flappyanticheat.data;
 
 import com.justdoom.flappyanticheat.FlappyAnticheat;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.minestom.server.color.Color;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +23,7 @@ public class FileData {
                 createFiles(fileName);
             }
             PrintWriter out = new PrintWriter(new FileWriter(log, true));
-            out.append(ChatColor.stripColor(message));
+            out.append(PlainComponentSerializer.plain().serialize(LegacyComponentSerializer.legacySection().deserialize(message)));
             out.close();
         }catch(IOException e){
             e.printStackTrace();
