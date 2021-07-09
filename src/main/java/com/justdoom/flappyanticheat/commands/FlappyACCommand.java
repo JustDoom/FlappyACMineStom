@@ -39,7 +39,7 @@ public class FlappyACCommand extends Command {
         switch (operation){
             case "reload":
                 final YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
-                        .path(Path.of("./FlappyAnticheat/config.yml")) // Set where we will load and save to
+                        .path(Path.of("./extensions/FlappyAnticheat/config.yml")) // Set where we will load and save to
                         .build();
 
                 try {
@@ -52,6 +52,7 @@ public class FlappyACCommand extends Command {
                     System.exit(1);
                     return;
                 }
+
                 sender.sendMessage(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "reload").getString()));
 
             case "resetviolations":
@@ -78,7 +79,7 @@ public class FlappyACCommand extends Command {
                         }
                     }
                     if(FlappyAnticheat.getInstance().root.node("messages", "flag-to-console").getBoolean()) {
-                        //todo MinecraftServer.getCommandManager().execute(MinecraftServer.getCommandManager().getConsoleSender(), ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
+                        System.out.println(ColorUtil.translate(FlappyAnticheat.getInstance().root.node("prefix").getString() + FlappyAnticheat.getInstance().root.node("messages", "violation-reset", "all").getString()));
                     }
                 //}
             case "alerts":

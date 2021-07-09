@@ -30,10 +30,8 @@ public class SpeedA extends Check {
     private Map<UUID, Double> lastDist = new HashMap<>();
 
     public SpeedA() {
-        super("Speed", "A", false);
-    }
+        super("Speed", "A", true);
 
-    public void SpeedA() {
         GlobalEventHandler node = MinecraftServer.getGlobalEventHandler();
         node.addListener(PlayerMoveEvent.class, event -> {
             Player player = event.getPlayer();

@@ -46,9 +46,7 @@ public class GroundSpoofA extends Check {
                 double groundY = 0.015625;
                 boolean client = packet.onGround, server = packet.y % groundY < 0.0001;
 
-                System.out.println("Client: " + client);
-                System.out.println("Server: " + server);
-                if (client != server/** && !PlayerUtil.isOnClimbable(player)**/) {
+                if (client != server && !PlayerUtil.isOnClimbable(player)) {
                     //if (++buffer > 1) {
 
                         boolean boat = false;
@@ -84,14 +82,12 @@ public class GroundSpoofA extends Check {
                         }**/
 
                         //if (!boat && !shulker && !pistonHead) {
-                            System.out.println("5");
                             String suspectedHack;
                             if(player.getPosition().getY() % groundY == 0.0){
                                 suspectedHack = "Criticals/Anti Hunger";
                             } else {
                                 suspectedHack = "NoFall";
                             }
-                            System.out.println("FAIL");
                             fail("mod=" + player.getPosition().getY() % groundY + " &7Client: &2" + client + " &7Server: &2" + server + " &7Suspected Hack: &2" + suspectedHack, player);
                         //}
                     //}
