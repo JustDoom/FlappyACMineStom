@@ -4,25 +4,10 @@ import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.PlayerUtil;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerPacketEvent;
-import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerPacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
-import net.minestom.server.utils.Position;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class GroundSpoofA extends Check {
 
@@ -37,7 +22,7 @@ public class GroundSpoofA extends Check {
         node.addListener(PlayerPacketEvent.class, event -> {
             Player player = event.getPlayer();
             if (event.getPacket() instanceof ClientPlayerPositionPacket) {
-                if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()) || player.getPosition().getY() < 1 || player.isDead()) {
+                if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()) || player.getPosition().y() < 1 || player.isDead()) {
                     return;
                 }
 
@@ -83,12 +68,12 @@ public class GroundSpoofA extends Check {
 
                         //if (!boat && !shulker && !pistonHead) {
                             String suspectedHack;
-                            if(player.getPosition().getY() % groundY == 0.0){
+                            if(player.getPosition().y() % groundY == 0.0){
                                 suspectedHack = "Criticals/Anti Hunger";
                             } else {
                                 suspectedHack = "NoFall";
                             }
-                            fail("mod=" + player.getPosition().getY() % groundY + " &7Client: &2" + client + " &7Server: &2" + server + " &7Suspected Hack: &2" + suspectedHack, player);
+                            fail("mod=" + player.getPosition().y() % groundY + " &7Client: &2" + client + " &7Server: &2" + server + " &7Suspected Hack: &2" + suspectedHack, player);
                         //}
                     //}
                 } else if (buffer > 0) buffer--;

@@ -5,22 +5,15 @@ import com.justdoom.flappyanticheat.checks.Check;
 import com.justdoom.flappyanticheat.utils.PlayerUtil;
 import com.justdoom.flappyanticheat.utils.ServerUtil;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.entity.EntityFinder;
-import net.minestom.server.utils.entity.EntityUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SpeedA extends Check {
 
@@ -40,11 +33,11 @@ public class SpeedA extends Check {
             if (ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
                 return;
 
-            Position to = new Position(event.getNewPosition().getX(), event.getNewPosition().getY(), event.getNewPosition().getZ());
+            Pos to = new Pos(event.getNewPosition().x(), event.getNewPosition().y(), event.getNewPosition().z());
             float friction = 0.91f;
 
-            double distX = to.getX() - player.getPosition().getX();
-            double distZ = to.getZ() - player.getPosition().getZ();
+            double distX = to.x() - player.getPosition().x();
+            double distZ = to.z() - player.getPosition().z();
             double dist = Math.sqrt((distX * distX) + (distZ * distZ));
             double lastDist = this.lastDist.getOrDefault(uuid, 0.0);
 
@@ -62,8 +55,9 @@ public class SpeedA extends Check {
 
                 boolean pistonHead = false;
 
-                for (Block block : PlayerUtil.getNearbyBlocks(new Position(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()), 2, player.getInstance())) {
-                    if (block.getBlockId() == Block.PISTON_HEAD.getBlockId()) {
+                for (Block block : PlayerUtil.getNearbyBlocks(
+                        new Pos(player.getPosition().x(), player.getPosition().y(), player.getPosition().z()), 2, player.getInstance())) {
+                    if (block.id() == Block.PISTON_HEAD.id()) {
                         pistonHead = true;
                         break;
                     }
