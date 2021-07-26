@@ -30,9 +30,9 @@ public class BlockPlaceB extends Check {
             if(ServerUtil.lowTPS(("checks." + check + "." + checkType).toLowerCase()))
                 return;
 
-            if (block.getBlockId() != mainHand.getMaterial().getId() && block.getBlockId() != offHand.getMaterial().getId()) {
+            if (block.id() != mainHand.getMaterial().getId() && block.id() != offHand.getMaterial().getId()) {
 
-                fail("hand=" + mainHand.getMaterial().getId() + " placed=" + block.getBlockId(), player);
+                fail("hand=" + mainHand.getMaterial().getId() + " placed=" + block.id(), player);
             }
         });
     }

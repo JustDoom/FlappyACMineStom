@@ -18,7 +18,7 @@ public class BadPacketsA extends Check {
         node.addListener(PlayerPacketEvent.class, event -> {
             if (event.getPacket() instanceof ClientPlayerPositionPacket || event.getPacket() instanceof ClientPlayerPositionAndRotationPacket) {
 
-                float pitch = event.getPlayer().getPosition().getPitch();
+                float pitch = event.getPlayer().getPosition().pitch();
                 if(Math.abs(pitch) > 90F || Math.abs(pitch) < -90F){
                     String suspectedHack = "Old/Bad KillAura (This cannot false)";
                     fail("&7pitch=&2" + pitch + " &7Suspected Hack: &2" + suspectedHack, event.getPlayer());
