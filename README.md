@@ -1,6 +1,5 @@
 # FlappyACMineStom
-
-https://ci.imjustdoom.com/job/FlappyAC%20Minestom/badge/icon
+![Build Status](https://ci.imjustdoom.com/job/FlappyAC%20Minestom/badge/icon)
 
 MineStom port of my anticheat Flappy
 
